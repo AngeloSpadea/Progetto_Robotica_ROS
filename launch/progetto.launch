@@ -1,15 +1,10 @@
-<!-- File: ~/catkin_ws/src/pacchetto_principale/launch/main_launch.launch -->
-
 <launch>
-  <!-- Includi il primo file di lancio -->
   <include file="$(find panda_moveit_config)/launch/demo.launch" />
 
-  <!-- Includi il secondo file di lancio -->
-  <node name="fsm" pkg="robot_pkg" type="fsm.py" output="screen"/>
+  <node name="fsm" pkg="robot_pkg" type="fsm.py" output="screen"/>  
+  <node name="move_robot" pkg="robot_pkg" type="move_robot.py" output="screen"/>
+  <node name="control_robot" pkg="robot_pkg" type="control_robot.py" output="screen"/>
 
-  <!-- Aggiungi altri nodi se necessario -->
-  <!-- node name="move_end_effector" pkg="robot_pkg" type="move_end_effector.py" output="screen"/ -->
-  <!-- node name="move_robot" pkg="robot_pkg" type="move_robot.py" output="screen"/ -->
-  <!-- node name="control_robot" pkg="robot_pkg" type="control.py" output="screen"/ -->
+
   <node name="smach_view" pkg="smach_viewer" type="smach_viewer.py" output="screen"/>
 </launch>

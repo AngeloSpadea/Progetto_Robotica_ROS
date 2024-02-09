@@ -10,7 +10,11 @@ Il progetto si occupa di far eseguire al robot Panda il task di Pick and Place. 
 
 Le seguenti directory sono strutturate così:
 
-- **launch**: Contiene il file `progetto.launch`, che è utilizzato per avviare l'applicazione.
+- **launch**: Contiene il file `progetto.launch`, che è utilizzato per avviare:
+  - panda_moveit_config/launch/demo.launc
+  - il nodo "fsm" che avvia la fsm.py
+  - il nodo "move_robot" che avvia la move_robot.py
+  - il nodo "control_robot" che avvia la control_robot.py
 - **src**: Contiene i seguenti file:
 
   - `fsm.py`: Implementa la macchina a stati.
@@ -28,8 +32,8 @@ Il nodo `ControlNode` offre il seguente servizio:
 
 - `/start` (tipo: Empty): Questo servizio deve essere richiamato per avviare il task.
 
-```bash
-# rosservice call /start "{}"
+```http
+  $ rosservice call /start "{}"
 ```
 
 ## Installazione
@@ -102,6 +106,12 @@ The next command will configure your catkin workspace:
   $ catkin build
 ```
 Dopodichè scaricare ed inserire tutti i file all'interno di un pacchetto situato in ~/ws_moveit/src.
+## Come avviare il progetto
+```http
+  $ cd ~/ws_moveit
+  $ roslaunch robot_pkg progetto.launch
 
-```bash
-# rosservice call /start "{}"
+aprire un secondo terminale e avviare il servizio  
+
+```http
+  $ rosservice call /start "{}"

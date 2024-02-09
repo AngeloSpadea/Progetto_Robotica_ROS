@@ -58,10 +58,10 @@ class PICK(smach.State):
         pub.publish('Pick')
         if stop:
             return 'stop'
-        elif picked:
-            return 'target_position'
+        elif not picked:
+            return 'wait'            
         else:
-            return 'wait'
+            return 'target_position'
 
 # Define state PLACE
 class PLACE(smach.State):
@@ -75,11 +75,11 @@ class PLACE(smach.State):
         if stop:
             return 'stop'
         elif picked:
+            return 'wait'            
+        else:            
             target = False
             picked = False
             return 'home_position'
-        else:
-            return 'wait'
 
 # ROS Node
 def Callback_start(data):

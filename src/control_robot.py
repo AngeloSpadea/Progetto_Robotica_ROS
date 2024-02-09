@@ -34,11 +34,6 @@ class ControlNode:
         self.status_job = False        
 
         #----Posizioni predefinite----
-        self.home_pose = Pose()
-        self.home_pose.position.x = 0.2
-        self.home_pose.position.y = 0.4
-        self.home_pose.position.z = 0.4
-        self.home_pose.orientation.x=1
 
         self.pick_pose = Pose()
         self.pick_pose.position.x = 0.2
@@ -81,10 +76,6 @@ class ControlNode:
 
             elif self.status == "GoTo":
                 rospy.loginfo("GOTO action...")
-                # Pubblica sul topic "target_arm" il messaggio pose "Home_pose"
-                #self.target_arm_pub.publish(self.home_pose)
-                # Aspetta che il topic "status_job" sia True
-                #self.wait_for_job_completion()
 
                 # Pubblica sul topic "target_topic" un messaggio booleano True
                 self.target_topic_pub.publish(True)
@@ -92,16 +83,10 @@ class ControlNode:
                 rospy.loginfo("PICK action...")
                 # Pubblica sul topic "target_Arm" la posa "posa_pick"
                 self.target_arm_pub.publish(self.pick_pose)
-                # Aspetta che il topic "status_job" sia True
-                #self.wait_for_job_completion()
                 
                 # Pubblica sul topic "Endeffector_status" la posa "Close"
                 self.endeffector_status_pub.publish(self.close_pose)
-                # Aspetta che il topic "status_job" sia True
-                #self.wait_for_job_completion()
-                #rospy.sleep(6)
 
-                self.status_job_pub=True
                 while not rospy.is_shutdown() and self.status_job:
                     # Pubblica sul topic "picked_topic" il valore booleano True
                     self.picked_topic_pub.publish(True)
@@ -110,13 +95,9 @@ class ControlNode:
                 rospy.loginfo("PLACE action...")
                 # Pubblica sul topic "target_Arm" la posa "posa_place"
                 self.target_arm_pub.publish(self.place_pose)
-                # Aspetta che il topic "status_job" sia True
-                #self.wait_for_job_completion()
 
                 # Pubblica sul topic "Endeffector_status" la posa "Open"
-                self.endeffector_status_pub.publish(self.open_pose)                
-                
-                self.status_job_pub=True
+                self.endeffector_status_pub.publish(self.open_pose)          
                 
                 while not rospy.is_shutdown() and self.status_job:
                     # Pubblica sui topic "picked_topic" e "target_topic" il valore booleano False

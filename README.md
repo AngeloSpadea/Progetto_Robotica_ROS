@@ -10,7 +10,6 @@ Il progetto si occupa di far eseguire al robot Panda il task di Pick and Place. 
 
 Il progetto è strutturato in vari packages. Uno dei packages principali è `robot_pkg`, che contiene le seguenti directory e file:
 
-- **include**: Contiene file di inclusione, se necessario.
 - **launch**: Contiene il file `progetto.launch`, che è utilizzato per avviare l'applicazione.
 - **src**: Contiene i seguenti file:
 
@@ -18,12 +17,12 @@ Il progetto è strutturato in vari packages. Uno dei packages principali è `rob
   - `move_robot.py`: Implementa la classe `ArmController`, responsabile della gestione del robot in Rviz. Esso fornisce due metodi:
     - `move_arm(self)`: Si occupa dello spostamento del robot fornendo una posizione e un orientamento tramite il topic `target_arm`.
     - `move_eff(self)`: Si occupa dell'apertura e della chiusura della pinza. I parametri vengono forniti dal topic `endeffector_status`.
-  - `move_tutorial.py`: Implementa la classe `ControlNode`, responsabile della gestione delle azioni in base allo stato fornito da `fsm.py` tramite il topic `/status`.
+  - `control_robot.py`: Implementa la classe `ControlNode`, responsabile della gestione delle azioni in base allo stato fornito da `fsm.py` tramite il topic `/status`.
 
 - `CMakeLists.txt`: File di configurazione CMake per il package.
 - `package.xml`: File di manifest del package.
 
-## Servizi Offerti
+## Service
 
 Il nodo `ControlNode` offre il seguente servizio:
 

@@ -4,20 +4,13 @@ import rospy
 from std_srvs.srv import Empty, EmptyResponse
 from std_msgs.msg import Bool, String
 from geometry_msgs.msg import Pose, Point
-from threading import Lock
 
 
 class ControlNode:
     def __init__(self):
         rospy.init_node('control_node')
-        #----Inizializzazione dei servizi e dei publisher----
+        #----Inizializzazione del service
         self.start_service = rospy.Service('start', Empty, self.start_callback)
-        self.stop_service = rospy.Service('stop', Empty, self.stop_callback)
-
-        self.mutex = Lock()  # Mutex per la gestione dei thread
-        self.running = False  # Flag per indicare se il nodo è in esecuzione
-        self.stopping = False  # Flag per indicare se il nodo sta fermarsi
-        self.stop_requested_during_start = False  # Flag per indicare se è stata richiesta l'interruzione durante l'avvio
 
         #----Publisher per i vari topic----
 
@@ -38,8 +31,7 @@ class ControlNode:
 
         #----Definizione delle variabili di controllo----
         self.status = None
-        self.status_job = False
-        
+        self.status_job = False        
 
         #----Posizioni predefinite----
         self.home_pose = Pose()
@@ -79,80 +71,62 @@ class ControlNode:
     # Funzione per eseguire le azioni in base allo stato corrente
     def start_action(self):
         # Ciclo fino a quando lo stato di stopping non diventa True
-        while not self.stop_requested_during_start:
+        while True:
             # Definisci qui le azioni di avvio in base allo stato corrente
             rospy.loginfo("Start action...")
             if self.status == "Wait":
                 rospy.loginfo("WAIT action...")
                 # Pubblica sul topic "start_topic" un messaggio booleano True
                 self.start_topic_pub.publish(True)
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
 
             elif self.status == "GoTo":
                 rospy.loginfo("GOTO action...")
                 # Pubblica sul topic "target_arm" il messaggio pose "Home_pose"
-                self.target_arm_pub.publish(self.home_pose)
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
+                #self.target_arm_pub.publish(self.home_pose)
                 # Aspetta che il topic "status_job" sia True
-                self.wait_for_job_completion()
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
+                #self.wait_for_job_completion()
+
                 # Pubblica sul topic "target_topic" un messaggio booleano True
                 self.target_topic_pub.publish(True)
             elif self.status == "Pick":
                 rospy.loginfo("PICK action...")
                 # Pubblica sul topic "target_Arm" la posa "posa_pick"
                 self.target_arm_pub.publish(self.pick_pose)
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
                 # Aspetta che il topic "status_job" sia True
-                self.wait_for_job_completion()
+                #self.wait_for_job_completion()
+                
                 # Pubblica sul topic "Endeffector_status" la posa "Close"
                 self.endeffector_status_pub.publish(self.close_pose)
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
                 # Aspetta che il topic "status_job" sia True
-                self.wait_for_job_completion()
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
-                # Pubblica sul topic "picked_topic" il valore booleano True
-                self.picked_topic_pub.publish(True)
+                #self.wait_for_job_completion()
+                #rospy.sleep(6)
+
+                self.status_job_pub=True
+                while not rospy.is_shutdown() and self.status_job:
+                    # Pubblica sul topic "picked_topic" il valore booleano True
+                    self.picked_topic_pub.publish(True)
 
             elif self.status == "Place":
                 rospy.loginfo("PLACE action...")
                 # Pubblica sul topic "target_Arm" la posa "posa_place"
                 self.target_arm_pub.publish(self.place_pose)
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
                 # Aspetta che il topic "status_job" sia True
-                self.wait_for_job_completion()
+                #self.wait_for_job_completion()
+
                 # Pubblica sul topic "Endeffector_status" la posa "Open"
-                self.endeffector_status_pub.publish(self.open_pose)
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
-                # Aspetta che il topic "status_job" sia True
-                self.wait_for_job_completion()
-                # Controllo se è stata richiesta un'operazione di stop durante l'azione
-                if self.stop_requested_during_start: self.handle_stop_request(); break
-                # Pubblica sui topic "picked_topic" e "target_topic" il valore booleano False
-                self.picked_topic_pub.publish(False)
-                self.target_topic_pub.publish(False)
-
-            rospy.loginfo("Start action completed.")
-
-    # Funzione per gestire la richiesta di stop durante l'azione
-    def handle_stop_request(self):
-        rospy.loginfo("Stop requested during action. Stopping...")
-        self.stop_requested_during_start = False
-        self.stop_topic_pub.publish(True)
+                self.endeffector_status_pub.publish(self.open_pose)                
+                
+                self.status_job_pub=True
+                
+                while not rospy.is_shutdown() and self.status_job:
+                    # Pubblica sui topic "picked_topic" e "target_topic" il valore booleano False
+                    self.picked_topic_pub.publish(False)
+                    self.target_topic_pub.publish(False)
 
     # Funzione per attendere il completamento del lavoro
     def wait_for_job_completion(self):
         while not rospy.is_shutdown() and not self.status_job:
             rospy.sleep(1)
-            if self.stop_requested_during_start: self.handle_stop_request(); break
 
     # Funzione per eseguire le azioni di stop
     def stop_action(self):
@@ -164,32 +138,9 @@ class ControlNode:
     
     # Callback per gestire la richiesta di avvio
     def start_callback(self, req):
-        with self.mutex:
-            if not self.running and not self.stopping:
-                self.running = True
-                rospy.loginfo("Start command received. Starting...")
-                self.start_action()
-                rospy.loginfo("Start process completed.")
-                self.running = False
-            else:
-                rospy.logwarn("Cannot start, already running or stopping.")
-        return EmptyResponse()
-
-    # Callback per gestire la richiesta di stop
-    def stop_callback(self, req):
-        with self.mutex:
-            if self.running and not self.stopping:
-                self.stopping = True
-                rospy.loginfo("Stop command received. Stopping...")
-                self.stop_action()
-                rospy.loginfo("Stop process completed.")
-                self.stopping = False
-            elif self.running and self.stopping:
-                rospy.loginfo("Stop requested during start. Waiting for start to complete.")
-                self.stop_requested_during_start = True
-            else:
-                rospy.logwarn("Cannot stop, not running or already stopping.")
-        return EmptyResponse()
+        self.running = True
+        rospy.loginfo("Start command received. Starting...")
+        self.start_action()     
 
     # Funzione per eseguire il nodo
     def run(self):

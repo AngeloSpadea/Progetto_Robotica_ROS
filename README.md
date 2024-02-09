@@ -30,11 +30,12 @@ Il nodo `ControlNode` offre il seguente servizio:
 
 ```bash
 # rosservice call /start "{}"
+```
 
 ## Installazione
 
 Descrizione dei passaggi per installare il progetto, inclusi eventuali dipendenze.
-## Install Catkin Tools and wstool
+# Install Catkin Tools and wstool
 
 On your virtual machine, make sure you have the most up to date packages:
 
@@ -57,7 +58,7 @@ Install <a href="http://wiki.ros.org/wstool" target="_blank">wstool</a>:
   $ sudo apt install python3-wstool
 ```
 
-## Create a Catkin Workspace
+# Create a Catkin Workspace
 
 You will need to create a catkin workspace setup:
 
@@ -66,7 +67,7 @@ You will need to create a catkin workspace setup:
   $ cd ~/ws_moveit/src
 ```
 
-## Download MoveIt Source
+# Download MoveIt Source
 
 ```http
   $ wstool init .
@@ -75,7 +76,7 @@ You will need to create a catkin workspace setup:
   $ wstool update -t .
 ```
 
-## Download Example Code
+# Download Example Code
 
 Within your catkin workspace, download the tutorials as well as the ``panda_moveit_config`` package:
 
@@ -85,7 +86,7 @@ Within your catkin workspace, download the tutorials as well as the ``panda_move
   $ git clone https://github.com/ros-planning/panda_moveit_config.git -b noetic-devel
 ```
 
-## Build your Catkin Workspace
+# Build your Catkin Workspace
 
 The following will install from Debian any package dependencies not already in your workspace:
 
@@ -100,12 +101,7 @@ The next command will configure your catkin workspace:
   $ catkin config --extend /opt/ros/noetic --cmake-args -DCMAKE_BUILD_TYPE=Release
   $ catkin build
 ```
-
-Source the catkin workspace:
-
-```http
-  $   source ~/ws_moveit/devel/setup.bash
-```
+Dopodichè scaricare ed inserire il pacchetto all'interno di ~/ws_moveit/src.
 
 ```bash
 # rosservice call /start "{}"

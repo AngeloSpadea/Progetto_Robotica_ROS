@@ -93,9 +93,6 @@ class ArmController:
         # Resetta il target del braccio a None dopo il movimento
         self.target_arm_pose = None
 
-        # Comunica che il movimento è finito pubblicando "True" sul topic status_job
-        self.status_job_publisher.publish(True)
-
     def move_eef(self):
         # Verifica se il target dell'end effector è valido
         while self.target_eff_pose is None:

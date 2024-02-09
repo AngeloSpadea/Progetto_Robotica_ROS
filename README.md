@@ -110,6 +110,7 @@ Dopodichè scaricare ed inserire tutti i file all'interno di un pacchetto situat
 ```http
   $ cd ~/ws_moveit
   $ roslaunch robot_pkg progetto.launch
+```
 
 aprire un secondo terminale e avviare il servizio  
 

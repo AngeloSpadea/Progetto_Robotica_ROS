@@ -39,7 +39,7 @@ Il nodo `ControlNode` offre il seguente servizio:
 ## Installazione
 
 Descrizione dei passaggi per installare il progetto, inclusi eventuali dipendenze.
-# Install Catkin Tools and wstool
+### Install Catkin Tools and wstool
 
 On your virtual machine, make sure you have the most up to date packages:
 
@@ -62,7 +62,7 @@ Install <a href="http://wiki.ros.org/wstool" target="_blank">wstool</a>:
   $ sudo apt install python3-wstool
 ```
 
-# Create a Catkin Workspace
+### Create a Catkin Workspace
 
 You will need to create a catkin workspace setup:
 
@@ -71,7 +71,7 @@ You will need to create a catkin workspace setup:
   $ cd ~/ws_moveit/src
 ```
 
-# Download MoveIt Source
+### Download MoveIt Source
 
 ```http
   $ wstool init .
@@ -80,7 +80,7 @@ You will need to create a catkin workspace setup:
   $ wstool update -t .
 ```
 
-# Download Example Code
+### Download Example Code
 
 Within your catkin workspace, download the tutorials as well as the ``panda_moveit_config`` package:
 
@@ -90,7 +90,7 @@ Within your catkin workspace, download the tutorials as well as the ``panda_move
   $ git clone https://github.com/ros-planning/panda_moveit_config.git -b noetic-devel
 ```
 
-# Build your Catkin Workspace
+### Build your Catkin Workspace
 
 The following will install from Debian any package dependencies not already in your workspace:
 

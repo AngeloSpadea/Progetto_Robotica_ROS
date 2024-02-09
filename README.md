@@ -28,14 +28,84 @@ Il nodo `ControlNode` offre il seguente servizio:
 
 - `/start` (tipo: Empty): Questo servizio deve essere richiamato per avviare il task.
 
-## Requisiti
-
-- ROS (versione)
-- Altri requisiti specifici del sistema, se applicabile
+```bash
+# rosservice call /start "{}"
 
 ## Installazione
 
 Descrizione dei passaggi per installare il progetto, inclusi eventuali dipendenze.
+## Install Catkin Tools and wstool
+
+On your virtual machine, make sure you have the most up to date packages:
+
+```http
+  $ rosdep update
+  $ sudo apt update
+  $ sudo apt dist-upgrade
+```
+
+
+Install <a href="https://catkin-tools.readthedocs.io/en/latest/" target="_blank">catkin_tools</a>:
+
+```http
+  $ sudo apt install python3-catkin-tools
+```
+
+Install <a href="http://wiki.ros.org/wstool" target="_blank">wstool</a>:
+
+```http
+  $ sudo apt install python3-wstool
+```
+
+## Create a Catkin Workspace
+
+You will need to create a catkin workspace setup:
+
+```http
+  $ mkdir -p ~/ws_moveit/src
+  $ cd ~/ws_moveit/src
+```
+
+## Download MoveIt Source
+
+```http
+  $ wstool init .
+  $ wstool merge -t . https://raw.githubusercontent.com/ros-planning/moveit/master/moveit.rosinstall
+  $ wstool remove moveit_tutorials  
+  $ wstool update -t .
+```
+
+## Download Example Code
+
+Within your catkin workspace, download the tutorials as well as the ``panda_moveit_config`` package:
+
+```http
+  $ cd ~/ws_moveit/src
+  $ git clone https://github.com/ros-planning/moveit_tutorials.git -b master
+  $ git clone https://github.com/ros-planning/panda_moveit_config.git -b noetic-devel
+```
+
+## Build your Catkin Workspace
+
+The following will install from Debian any package dependencies not already in your workspace:
+
+```http
+  $ cd ~/ws_moveit/src rosdep install -y --from-paths . --ignore-src --rosdistro noetic
+```
+
+The next command will configure your catkin workspace:
+
+```http
+  $ cd ~/ws_moveit
+  $ catkin config --extend /opt/ros/noetic --cmake-args -DCMAKE_BUILD_TYPE=Release
+  $ catkin build
+```
+
+Source the catkin workspace:
+
+```http
+  $   source ~/ws_moveit/devel/setup.bash
+```
 
 ```bash
-# Esempi di comandi per l'installazione, se applicabile
+# rosservice call /start "{}"

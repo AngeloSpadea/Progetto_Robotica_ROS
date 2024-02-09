@@ -8,7 +8,7 @@ Il progetto si occupa di far eseguire al robot Panda il task di Pick and Place. 
 
 ## Struttura del Progetto
 
-Il progetto è strutturato in vari packages. Uno dei packages principali è `robot_pkg`, che contiene le seguenti directory e file:
+Le seguenti directory sono strutturate così:
 
 - **launch**: Contiene il file `progetto.launch`, che è utilizzato per avviare l'applicazione.
 - **src**: Contiene i seguenti file:
@@ -101,7 +101,7 @@ The next command will configure your catkin workspace:
   $ catkin config --extend /opt/ros/noetic --cmake-args -DCMAKE_BUILD_TYPE=Release
   $ catkin build
 ```
-Dopodichè scaricare ed inserire il pacchetto all'interno di ~/ws_moveit/src.
+Dopodichè scaricare ed inserire tutti i file all'interno di un pacchetto situato in ~/ws_moveit/src.
 
 ```bash
 # rosservice call /start "{}"

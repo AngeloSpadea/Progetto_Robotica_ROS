@@ -1,6 +1,6 @@
 # Robotica 2023-2024
 
-Breve descrizione del progetto.
+Robot che in loop si muove tra tre posizione fisse
 
 ## Descrizione
 
